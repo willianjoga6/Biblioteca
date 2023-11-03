@@ -4,6 +4,6 @@ namespace Biblioteca.Domain.Interface
 {
     public interface ILivro
     {
-        Task<ResponseGetLivro> GetLivro();
+        Task<List<ResponseGetLivro>> GetLivro(int idLivro);
     }
 }

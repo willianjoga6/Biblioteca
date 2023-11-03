@@ -1,6 +1,8 @@
 using Biblioteca.Application;
 using Biblioteca.Core;
 using Biblioteca.Domain.Interface;
+using Biblioteca.Domain.Model;
+using Biblioteca.Infrastructure.Data;
 using Biblioteca.Infrastructure.Repository;
 
 
@@ -17,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<ILivro, Livro>();
 builder.Services.AddScoped<ILivroConsulta, LivroConsulta>();
+builder.Services.AddScoped<IConexaoDB, ConexaoDB>();
+
 
 var app = builder.Build();
 

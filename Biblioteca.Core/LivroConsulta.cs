@@ -12,11 +12,11 @@ namespace Biblioteca.Core
             _livroRepository = livroRepository;
         }
 
-        public async Task<ResponseGetLivro> ConsultaLivro()
+        public async Task<List<ResponseGetLivro>> ConsultaLivro(int idLivro)
         {
             try
             {
-                var retornoGetLivro = _livroRepository.ConsultaLivroRepository();
+                var retornoGetLivro = _livroRepository.ConsultaLivroRepository(idLivro);
 
                 return await retornoGetLivro;
             }

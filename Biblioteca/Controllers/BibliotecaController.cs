@@ -16,11 +16,12 @@ namespace Biblioteca.Controllers
         }
 
         [HttpGet(Name = "ConsultarLivro")]
-        public async Task<ResponseGetLivro> ConsultarLivro() 
+        public async Task<List<ResponseGetLivro>> ConsultarLivro([FromQuery] int IdLivro) 
         {
             try
             {
-                var teste = _ILivro.GetLivro();
+
+                var teste = _ILivro.GetLivro(IdLivro);
 
                 return await teste;
             }

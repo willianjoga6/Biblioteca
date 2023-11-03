@@ -1,26 +1,61 @@
 ﻿using Biblioteca.Domain.Interface;
 using Biblioteca.Domain.Model;
+using Dapper;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Biblioteca.Infrastructure.Repository
 {
     public class LivroRepository : ILivroRepository
     {
-        public async Task<ResponseGetLivro> ConsultaLivroRepository()
+		private readonly IConexaoDB _conexaoDB;
+        private readonly string _stringConexao;
+
+        public LivroRepository(IConexaoDB conexaoDB)
+        {
+            _conexaoDB = conexaoDB;
+            _stringConexao = _conexaoDB.GetConexao();            
+        }
+
+        public async Task<List<ResponseGetLivro>> ConsultaLivroRepository(int idLivro)
         {
 			try
 			{
-				var teste = new ResponseGetLivro();
-				teste.IdLivro = 1;
-				teste.NomeLivro = "TesteNome";
-				teste.QuantidadeTotal= 10;
-				teste.QuantidadeDisponível= 7;
+				List<ResponseGetLivro> listaLivros = new List<ResponseGetLivro>();
 
-				return await Task.FromResult(teste);
+                using var _conn = new MySqlConnection(_stringConexao);
+
+                var query = "" +
+                    "SELECT " + 
+	                    "a.id_livro, "+
+                        "a.nome_livro, "+
+                        "b.quantidade_estoque, "+
+                        "c.quantidade_emprestimo "+   
+                        "FROM biblioteca.livros a "+
+                    "inner join biblioteca.livros_estoques b on (a.id_livro = b.id_livro) "+
+                    "inner join biblioteca.livros_estoques_emprestimos c on (a.id_livro = c.id_livro) "+
+                    "";
+                var queryParam = query + "Where a.id_livro = @idLivro";
+
+                var select = (idLivro > 0) ? _conn.Query<ResponseGetLivro>(queryParam, new { idLivro }) : _conn.Query<ResponseGetLivro>(query);
+
+                foreach (var i in select)
+                {
+                    var retornoLivro = new ResponseGetLivro(
+                        i.id_livro, 
+                        i.nome_livro, 
+                        i.quantidade_estoque, 
+                        (i.quantidade_estoque-i.quantidade_emprestimo));
+
+                    listaLivros.Add(retornoLivro);
+                }					
+
+                return await Task.FromResult(listaLivros);
 
 			}
 			catch (Exception)

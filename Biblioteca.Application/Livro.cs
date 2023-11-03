@@ -13,11 +13,11 @@ namespace Biblioteca.Application
             _livroConsulta = livroConsulta;
         }
 
-        public async Task<ResponseGetLivro> GetLivro()
+        public async Task<List<ResponseGetLivro>> GetLivro(int idLivro)
         {
 			try
 			{
-                var retornoGetLivro = _livroConsulta.ConsultaLivro();
+                var retornoGetLivro = _livroConsulta.ConsultaLivro(idLivro);
 
                 return await retornoGetLivro;
 			}
