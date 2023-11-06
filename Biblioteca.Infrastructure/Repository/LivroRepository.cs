@@ -73,8 +73,8 @@ namespace Biblioteca.Infrastructure.Repository
                     "VALUES (@idLivro, @nomeLivro)";
 
                 var insert = _conn.Execute(query, new {
-                        requestLivro.id_livro, 
-                        requestLivro.nome_livro 
+                    idLivro = requestLivro.id_livro,
+                    nomeLivro = requestLivro.nome_livro 
                         }
                     );
 
