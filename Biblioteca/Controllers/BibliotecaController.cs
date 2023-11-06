@@ -1,6 +1,8 @@
 ﻿using Biblioteca.Domain.Interface;
 using Biblioteca.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
+using Biblioteca.Application.ViewModel;
+using Biblioteca.Application.Mappers;
 
 namespace Biblioteca.Controllers
 {
@@ -15,22 +17,37 @@ namespace Biblioteca.Controllers
             _ILivro = iLivro;
         }
 
-        [HttpGet(Name = "ConsultarLivro")]
-        public async Task<List<ResponseGetLivro>> ConsultarLivro([FromQuery] int IdLivro) 
+        [HttpGet(Name = "Consultar")]
+        public List<ResponseGetLivro> Consultar([FromQuery] int IdLivro)
         {
             try
             {
 
                 var teste = _ILivro.GetLivro(IdLivro);
 
-                return await teste;
+                return teste;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        [HttpPost(Name = "Inserir")]
+        public ResponseInserirLivro Inserir([FromBody] RequestLivroVM requestLivroVM)
+        {
+            try
+            {
+                var inserirLivro = RequestLivroMapper.ToRequestLivro(requestLivroVM);
+
+                var retornoLivro = _ILivro.InserirLivro(inserirLivro);
+
+                return retornoLivro;
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
+        }
     }
 }

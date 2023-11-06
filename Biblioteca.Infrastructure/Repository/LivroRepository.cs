@@ -22,7 +22,7 @@ namespace Biblioteca.Infrastructure.Repository
             _stringConexao = _conexaoDB.GetConexao();            
         }
 
-        public async Task<List<ResponseGetLivro>> ConsultaLivroRepository(int idLivro)
+        public List<ResponseGetLivro> ConsultarLivroRepository(int idLivro)
         {
 			try
 			{
@@ -55,13 +55,34 @@ namespace Biblioteca.Infrastructure.Repository
                     listaLivros.Add(retornoLivro);
                 }					
 
-                return await Task.FromResult(listaLivros);
-
+                return listaLivros;
 			}
 			catch (Exception)
 			{
 				throw;
 			}
+        }
+
+        public void InserirLivro(RequestLivro requestLivro)
+        {
+            try
+            {
+                using var _conn = new MySqlConnection(_stringConexao);
+
+                var query = "INSERT INTO biblioteca.livros (id_livro, nome_livro) " +
+                    "VALUES (@idLivro, @nomeLivro)";
+
+                var insert = _conn.Execute(query, new {
+                        requestLivro.id_livro, 
+                        requestLivro.nome_livro 
+                        }
+                    );
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }                       
         }
     }
 }

@@ -17,8 +17,8 @@ builder.Services.AddSwaggerGen();
 
 // Injeção de dependencia
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
-builder.Services.AddScoped<ILivro, Livro>();
-builder.Services.AddScoped<ILivroConsulta, LivroConsulta>();
+builder.Services.AddScoped<ILivro, Biblioteca.Application.Livro>();
+builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<IConexaoDB, ConexaoDB>();
 
 

@@ -6,20 +6,31 @@ namespace Biblioteca.Application
 {
     public class Livro : ILivro
     {
-        private readonly ILivroConsulta _livroConsulta;
+        private readonly ILivroService _livroConsulta;
+        private readonly ILivroService _livroService;
 
-        public Livro(ILivroConsulta livroConsulta)
+        public Livro(ILivroService livroConsulta, ILivroService livroService)
         {
             _livroConsulta = livroConsulta;
+            _livroService = livroService;
         }
 
-        public async Task<List<ResponseGetLivro>> GetLivro(int idLivro)
+        public ResponseInserirLivro InserirLivro(RequestLivro requestLivro)
+        {
+            _livroService.InserirLivro(requestLivro);
+
+            var retornoInserirLivro = new ResponseInserirLivro("Livro inserido com sucesso");
+
+            return retornoInserirLivro;
+        }
+
+        public List<ResponseGetLivro> GetLivro(int idLivro)
         {
 			try
 			{
-                var retornoGetLivro = _livroConsulta.ConsultaLivro(idLivro);
+                var retornoGetLivro = _livroConsulta.ConsultarLivro(idLivro);
 
-                return await retornoGetLivro;
+                return retornoGetLivro;
 			}
 			catch (Exception)
 			{

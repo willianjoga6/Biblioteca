@@ -2,9 +2,9 @@
 
 namespace Biblioteca.Domain.Interface
 {
-    public interface ILivroRepository
+    public interface ILivroService
     {
-        List<ResponseGetLivro> ConsultarLivroRepository(int idLivro);
+        List<ResponseGetLivro> ConsultarLivro(int IdLivro);
         public void InserirLivro(RequestLivro requestLivro);
     }
 }
